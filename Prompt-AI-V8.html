@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="theme-color" content="#f6f7fb">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Prompt AI V14 Pro Studio">
+<title>Prompt AI V14 Precision Flow Studio — Full Batch, Multi-Image & Templates</title>
+<style>
+
+/* ===== V14 YOUTHFUL UI ===== */
+:root{
+  --bg:#f6f7fb;--card:#ffffff;--line:#e8eaf1;--muted:#72778a;
+  --soft:#f1f3f8;--text:#171923;--accent:#6c5ce7;--accent2:#00b894;
+  --pink:#ff5c8a;--shadow:0 12px 35px rgba(29,35,60,.08);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg)}
+body{
+  margin:0;background:
+  radial-gradient(circle at 10% 0%,rgba(108,92,231,.12),transparent 28%),
+  radial-gradient(circle at 100% 8%,rgba(255,92,138,.10),transparent 24%),
+  var(--bg);
+  color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:680px;margin:auto;min-height:100vh;padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 90px)}
+header{padding:10px 3px 16px;display:block}
+.brand{font-size:24px;font-weight:950;letter-spacing:-1.2px;color:#171923}
+.brand span{display:block;color:var(--accent);font-size:11px;letter-spacing:.5px;margin-top:4px}
+.badge{
+  display:inline-flex;margin-top:9px;font-size:10px;font-weight:900;
+  background:#eeeaff;color:#5b4bd6;border:1px solid #ddd7ff;padding:7px 10px;border-radius:99px
+}
+.card{
+  background:rgba(255,255,255,.94);border:1px solid var(--line);border-radius:24px;
+  padding:17px;margin:12px 0;box-shadow:var(--shadow)
+}
+.title{font-size:15px;font-weight:900;margin-bottom:12px;color:#202230}
+.row{display:flex;gap:8px;align-items:center}.between{justify-content:space-between}
+.tabs-mode{
+  position:sticky;top:8px;z-index:20;display:flex;background:rgba(255,255,255,.88);
+  backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:17px;padding:5px;
+  margin-bottom:14px;box-shadow:0 8px 24px rgba(30,35,60,.07)
+}
+.tab-btn{flex:1;text-align:center;padding:11px 4px;font-weight:850;font-size:12px;border-radius:12px;color:#777b8c;border:0;background:transparent}
+.tab-btn.active{background:#171923;color:#fff;box-shadow:0 5px 14px rgba(23,25,35,.18)}
+.upload{
+  min-height:145px;border:2px dashed #b9b0ff;border-radius:18px;
+  background:linear-gradient(145deg,#faf9ff,#f5f3ff);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;padding:14px;cursor:pointer
+}
+.upload strong{color:#242633;margin-top:6px;font-size:14px}
+.upload small{color:#7c8090;font-size:11px;margin-top:3px}
+.image-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;width:100%}
+.thumb{width:78px;height:78px;border-radius:13px;overflow:hidden;position:relative;border:1px solid #dddfea;background:#f0f1f6}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.thumb button{position:absolute;top:4px;right:4px;background:#ff5c68;color:#fff;border:0;border-radius:50%;width:21px;height:21px;font-size:10px;display:grid;place-items:center}
+label{display:block;color:#555a6c;font-size:11px;font-weight:850;margin:13px 0 6px}
+input,select,textarea{
+  width:100%;border:1px solid #dfe2eb;border-radius:14px;background:#fafbfe;color:#1b1d27;
+  padding:13px;outline:none;transition:.18s
+}
+input:focus,select:focus,textarea:focus{border-color:#8b7ff0;box-shadow:0 0 0 3px rgba(108,92,231,.10);background:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.pills{display:flex;gap:7px;overflow:auto;padding-bottom:2px}
+.pill{white-space:nowrap;border:1px solid #dfe2eb;background:#f6f7fb;color:#555a6c;padding:10px 12px;border-radius:12px;font-weight:750}
+.pill.active{background:#171923;color:#fff;border-color:#171923}
+.generate{
+  width:100%;border:0;border-radius:16px;background:linear-gradient(135deg,#6c5ce7,#8b5cf6);
+  color:#fff;padding:16px;margin-top:15px;font-size:15px;font-weight:950;
+  box-shadow:0 10px 22px rgba(108,92,231,.24)
+}
+.secondary{border:1px solid #dfe2eb;background:#f7f8fb;color:#303341;border-radius:12px;padding:10px 12px;font-weight:850;font-size:12px}
+textarea{min-height:110px;line-height:1.48;resize:vertical}
+.copy{width:100%;border:0;border-radius:13px;background:#eef0f6;color:#303341;padding:13px;margin-top:9px;font-weight:850}
+.hint{font-size:11px;color:#858999;line-height:1.5;margin-top:10px}
+.mini{font-size:11px;color:#858999}
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}
+.check{border:1px solid #e0e2eb;background:#f8f9fc;border-radius:13px;padding:10px;color:#555a6c;font-size:11px;display:flex;align-items:center}
+.check input{width:auto;margin-right:7px}
+.flow-panel{
+  border:1px solid #d8d1ff;background:linear-gradient(145deg,#faf9ff,#f4f1ff);
+  border-radius:18px;padding:14px;margin-top:12px
+}
+.flow-head{display:flex;justify-content:space-between;align-items:center}
+.flow-title{font-weight:950;font-size:13px}.flow-badge{font-size:10px;border:1px solid #b9b0ff;color:#6252d9;background:#eeeaff;padding:5px 8px;border-radius:99px;font-weight:850}
+.flow-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.flow-btn{border:1px solid #d8dbe5;background:#fff;color:#303341;border-radius:12px;padding:12px 9px;font-weight:900;text-decoration:none;text-align:center;display:inline-block}
+.flow-btn.primary{background:#171923;color:#fff;border-color:#171923}
+.flow-status{font-size:11px;color:#777b8c;line-height:1.45;margin-top:9px}
+.prompt-card-result{border:1px solid #e1e3eb;background:#fbfbfd;border-radius:16px;padding:12px;margin-top:12px}
+.prompt-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-bottom:7px;border-bottom:1px solid #e7e8ee}
+.prompt-card-title{font-size:13px;font-weight:900;color:#6252d9}
+.prompt-card-actions{display:flex;gap:6px}
+.prompt-text{font-size:12px;white-space:pre-wrap;color:#4c5060;line-height:1.45;max-height:220px;overflow-y:auto;background:#f3f4f8;padding:10px;border-radius:10px}
+.history{display:flex;flex-direction:column;gap:8px}.history-item{border:1px solid #e2e4ec;background:#fafbfe;border-radius:13px;padding:11px;display:flex;justify-content:space-between;align-items:center}
+.history-item b{display:block;font-size:12px;color:#252733}.history-item small{color:#8b8f9e}
+.empty{text-align:center;color:#9296a5;padding:16px}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:#171923;color:#fff;padding:11px 18px;border-radius:99px;font-size:12px;font-weight:850;display:none;z-index:99;box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.batch-note{font-size:11px;color:#6252d9;line-height:1.45;margin-top:8px;font-weight:700}
+.hidden{display:none!important}
+
+/* Custom Modal for Template Name (Giống File V7) */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:999;padding:16px;backdrop-filter:blur(4px)}
+.modal-box{background:#ffffff;border:1px solid #dfe2eb;border-radius:20px;padding:20px;width:100%;max-width:400px;box-shadow:0 20px 40px rgba(0,0,0,0.15)}
+.modal-title{font-size:16px;font-weight:950;margin-bottom:10px;color:#171923}
+.modal-actions{display:flex;gap:8px;margin-top:14px}
+
+@media(max-width:430px){
+  .app{padding-left:11px;padding-right:11px}
+  .card{padding:14px;border-radius:20px}
+  .brand{font-size:22px}
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+<div class="brand">Prompt AI <span>V14 • 100 PROMPT CONTENT ENGINE</span></div>
+<div class="badge">✨ YOUTHFUL STUDIO</div>
+</header>
+<div class="card" style="padding:12px 14px;background:linear-gradient(135deg,#171923,#2b2850);color:#fff;border:0">
+  <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+    <div><div style="font-size:13px;font-weight:950">🚀 Tạo content hàng loạt</div>
+    <div style="font-size:10px;opacity:.72;margin-top:3px">100 prompt • Hook riêng • Lời thoại riêng</div></div>
+    <div style="font-size:24px">⚡</div>
+  </div>
+</div>
+
+<div class="tabs-mode">
+<button class="tab-btn active" id="tabSingle" onclick="switchMode('single')">1. Đơn</button>
+<button class="tab-btn" id="tabBatch" onclick="switchMode('batch')">⚡ Batch</button>
+<button class="tab-btn" id="tabTemplates" onclick="switchMode('templates')">💾 Mẫu (<span id="templateCountNum">0</span>)</button>
+</div>
+
+<div id="mainStudioContent">
+<section class="card section">
+<div class="title">📸 Ảnh tham chiếu sản phẩm (Hỗ trợ nhiều ảnh)</div>
+<div class="upload" onclick="document.getElementById('photoInput').click()">
+  <div style="font-size:32px">➕</div>
+  <strong>Chọn hoặc tải lên các ảnh tham chiếu</strong>
+  <small>Chọn nhiều ảnh cùng lúc, hệ thống sẽ tự phân bổ và đính kèm vào các prompt mẫu</small>
+</div>
+<input id="photoInput" type="file" accept="image/*" multiple style="display:none">
+
+<div class="image-grid" id="imageGrid"></div>
+
+<div id="clearPhotosBtn" style="display:none; margin-top:10px;">
+  <button class="secondary" onclick="clearAllPhotos()" style="width:100%; color:#ff6b6b">✕ Xóa tất cả ảnh tham chiếu</button>
+</div>
+<div class="mini" id="imageInfo" style="margin-top:6px;"></div>
+</section>
+
+<section class="card section">
+<div class="title">🎬 Cấu hình Kịch bản & Sản xuất</div>
+
+<div class="flow-panel" style="margin-bottom:12px">
+  <div class="flow-head"><div class="flow-title">🎯 CHẾ ĐỘ SẢN XUẤT</div><div class="flow-badge">V12 Pro</div></div>
+  <label>Chọn kiểu video</label>
+  <select id="studioMode" onchange="handleStudioModeChange()">
+    <option value="pose_only">🧍‍♀️ Chỉ tập trung tạo dáng (Không lời)</option>
+    <option value="sale">🔥 Chốt đơn mạnh — Hook + lợi ích + CTA</option>
+    <option value="ugc">🎥 UGC người thật — review tự nhiên</option>
+    <option value="fashion">👗 Fashion Model — trình diễn sản phẩm</option>
+    <option value="showcase">✨ Product Showcase — tập trung sản phẩm</option>
+    <option value="problem">🎯 Problem → Solution — nêu vấn đề rồi giải pháp</option>
+    <option value="story">📖 Storytelling — kể chuyện ngắn</option>
+    <option value="cinematic">🎬 Cinematic — quảng cáo cao cấp</option>
+  </select>
+
+  <div id="hookStrategyContainer">
+    <label>Chiến lược Hook</label>
+    <select id="hookStrategy">
+      <option value="auto">AI tự chọn Hook phù hợp</option>
+      <option value="curiosity">Tò mò / giữ người xem</option>
+      <option value="pain">Đánh đúng vấn đề</option>
+      <option value="benefit">Lợi ích nổi bật</option>
+      <option value="fomo">FOMO / sợ bỏ lỡ</option>
+    </select>
+  </div>
+  <div class="checks" style="margin-top:10px">
+    <label class="check"><input type="checkbox" id="uniqueHook" checked> Hook khác nhau 100%</label>
+    <label class="check"><input type="checkbox" id="uniqueDialogue" checked> Lời thoại khác nhau</label>
+  </div>
+  <label>Chủ đề lời thoại</label>
+  <input id="dialogueTheme" placeholder="Ví dụ: chất vải, form áo, phối đồ, cảm giác mặc, ưu đãi, CTA...">
+
+  <label>Hành động / Kiểu tạo dáng chính của nhân vật</label>
+  <input id="mainAction" placeholder="Ví dụ: tạo dáng xoay người 360 độ, bước đi tự tin, tay cầm sản phẩm giơ nhẹ...">
+  
+  <label>Bối cảnh</label>
+  <input id="scene" placeholder="Ví dụ: studio thời trang, phòng khách tối giản, ngoài phố...">
+</div>
+
+<!-- NÚT LƯU CẤU HÌNH THÀNH MẪU (GỌI MODAL GIỐNG V7) -->
+<div style="margin-bottom:12px;">
+  <button class="secondary" style="width:100%; background:#1b2d23; border-color:#3f7658; color:#69dc95; font-weight:850;" onclick="openTemplateModal()">⭐ Lưu cấu hình này thành Mẫu (Template)</button>
+</div>
+
+<!-- CHẾ ĐỘ 1: TẠO ĐƠN -->
+<div id="singleModeInputs">
+<label>Tên sản phẩm</label>
+<input id="product" placeholder="Ví dụ: Áo thun nữ form rộng oversize">
+</div>
+
+<!-- CHẾ ĐỘ 2: TẠO HÀNG LOẠT (BATCH) -->
+<div id="batchModeInputs" class="hidden">
+<label>Danh sách Sản phẩm <span class="mini">(Nhập mỗi sản phẩm 1 dòng)</span></label>
+<textarea id="batchProducts" placeholder="Ví dụ:&#10;Áo thun nữ form rộng&#10;Quần jean ống rộng cạp cao&#10;Váy xòe hoa nhí công sở"></textarea>
+
+<label>Số lượng prompt cho MỖI sản phẩm (tối đa 100)</label>
+<select id="variantCount">
+<option value="1">1 Prompt</option>
+<option value="5">5 Prompt</option>
+<option value="10">10 Prompt</option>
+<option value="20">20 Prompt</option>
+<option value="30">30 Prompt</option>
+<option value="50">50 Prompt</option>
+<option value="100" selected>100 Prompt — mỗi prompt khác Hook + lời thoại</option>
+</select>
+<div class="batch-note">⚡ Có thể tạo tối đa 100 prompt/lần. Mỗi prompt tự đổi Hook, lời thoại, góc nội dung và biến thể diễn đạt.</div>
+</div>
+
+<label>Mục tiêu video</label>
+<div class="pills" id="goals">
+<button class="pill active" data-v="quảng cáo">Quảng cáo</button>
+<button class="pill" data-v="chốt đơn">Chốt đơn</button>
+<button class="pill" data-v="review">Review</button>
+<button class="pill" data-v="giới thiệu">Giới thiệu</button>
+</div>
+
+<div class="grid">
+<div><label>Thời lượng</label><select id="duration">
+<option>4 giây</option><option>6 giây</option><option selected>8 giây</option><option>10 giây</option>
+<option value="20 giây">20 giây (Chia 2 mẫu 10s)</option>
+</select></div>
+<div><label>Khung hình</label><select id="ratio"><option selected>9:16 dọc</option><option>16:9 ngang</option><option>1:1 vuông</option></select></div>
+</div>
+
+<div class="grid" id="voiceRow">
+<div><label>Giọng đọc</label><select id="voice"><option>nữ miền Bắc</option><option>nam miền Bắc</option><option>nữ miền Nam</option><option>nam miền Nam</option></select></div>
+<div><label>Ngôn ngữ xuất</label><select id="lang"><option value="vi" selected>Tiếng Việt</option><option value="en">Tiếng Anh (For Sora/Runway)</option><option value="both">Song ngữ (Việt + Eng)</option></select></div>
+</div>
+
+<label>Độ chi tiết prompt</label>
+<select id="detail"><option value="gọn">Gọn – dễ copy</option><option value="chi tiết" selected>Chi tiết – AI dễ dựng</option><option value="siêu chi tiết">Siêu chi tiết – kiểm soát cao</option></select>
+
+<div class="checks">
+<label class="check"><input type="checkbox" id="noText" checked> Không chữ trên video</label>
+<label class="check"><input type="checkbox" id="noLogo" checked> Không thêm logo</label>
+<label class="check" id="lipCheckContainer"><input type="checkbox" id="lip" checked> Khẩu hình đồng bộ</label>
+<label class="check"><input type="checkbox" id="consistent" checked> Giữ nhân vật nhất quán</label>
+</div>
+
+<div class="flow-panel">
+  <div class="flow-head"><div class="flow-title">⚡ FLOW STUDIO BRIDGE</div><div class="flow-badge">Google Flow</div></div>
+  <div class="flow-status">Tối ưu sẵn cấu trúc cho Google Flow / Veo. Ảnh tham chiếu sẽ được tự động gắn kèm vào từng prompt tương ứng.</div>
+  <div class="flow-actions">
+    <button class="flow-btn primary" onclick="copyBestToFlow()">🚀 Copy Prompt #1</button>
+    <a class="flow-btn flow-link" href="https://labs.google/fx/tools/flow" target="_blank" rel="noopener noreferrer"
+   onclick="return openExternalLink('https://labs.google/fx/tools/flow', this)">🌐 Mở Google Flow</a>
+  </div>
+</div>
+
+<button class="generate" onclick="generateBatchPrompts()">⚡ TẠO PROMPT HÀNG LOẠT</button>
+</section>
+
+<section class="card section" id="output">
+<div class="row between">
+<div class="title" style="margin:0">✨ Bộ Prompt đã tạo (<span id="promptCountNum">0</span>)</div>
+<button class="secondary" onclick="clearResult()">Xóa tất cả</button>
+</div>
+
+<div class="row" style="margin-top:10px">
+<button class="copy" style="background:#3a3a42" onclick="copyAllPrompts()">📋 Copy Tất Cả Prompt</button>
+<button class="copy" style="background:#3a3a42" onclick="downloadAllTxt()">📥 Tải File .txt</button>
+</div>
+
+<div id="batchResultsList"></div>
+<div class="hint">Prompt có cấu trúc chuyên nghiệp theo shot, khóa reference ảnh tham chiếu, chống đổi sản phẩm và tối ưu hoàn hảo cho Google Flow.</div>
+</section>
+
+<section class="card section" id="history">
+<div class="row between"><div class="title" style="margin:0">🕘 Lịch sử prompt</div><button class="secondary" onclick="clearHistory()">Xóa lịch sử</button></div>
+<div class="history" id="historyList"></div>
+</section>
+</div>
+
+<!-- SECTION 3: QUẢN LÝ MẪU (TEMPLATES) -->
+<section class="card section hidden" id="templatesSection">
+  <div class="row between">
+    <div class="title" style="margin:0">💾 Quản lý Mẫu Cấu Hình Đã Lưu</div>
+    <button class="secondary" onclick="clearAllTemplates()" style="color:#ff6b6b">Xóa tất cả</button>
+  </div>
+  <div class="hint" style="margin-bottom:12px;">Danh sách các mẫu kịch bản bạn đã lưu để nhanh chóng tái sử dụng cho các dự án sau.</div>
+  <div id="templatesList" style="margin-top:12px;"></div>
+</section>
+
+</div>
+
+<!-- MODAL NHẬP TÊN MẪU (LƯU GIỐNG FILE V7) -->
+<div class="modal-overlay hidden" id="templateModal">
+  <div class="modal-box">
+    <div class="modal-title">⭐ Lưu cấu hình thành Mẫu</div>
+    <label>Nhập tên gợi nhớ cho mẫu:</label>
+    <input id="templateNameInput" placeholder="Ví dụ: Mẫu thời trang TikTok 8s" style="margin-top:6px;">
+    <div class="modal-actions">
+      <button class="secondary" style="flex:1" onclick="closeTemplateModal()">Hủy</button>
+      <button class="secondary" style="flex:1; background:#6c5ce7; color:#fff; border:0; font-weight:900;" onclick="confirmSaveTemplate()">Lưu mẫu</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let currentMode = 'single';
+let goal = "quảng cáo";
+let generatedList = [];
+let uploadedImages = []; 
+let savedTemplates = safeJSONParse(localStorage.getItem("promptAI_templates"), []);
+let appState = safeJSONParse(localStorage.getItem("promptAI_state"), {});
+
+function safeJSONParse(value, fallback){
+  try { return value ? JSON.parse(value) : fallback; } catch(e) { return fallback; }
+}
+function safeSetItem(key, value){
+  try {
+    localStorage.setItem(key, typeof value === "string" ? value : JSON.stringify(value));
+    return true;
+  } catch(e) {
+    console.warn("Storage error:", e);
+    toast("⚠️ Bộ nhớ trình duyệt bị giới hạn hoặc đang chặn lưu dữ liệu.");
+    return false;
+  }
+}
+function safeGetArray(key){
+  return safeJSONParse(localStorage.getItem(key), []);
+}
+function persistState(){
+  const ids=["product","batchProducts","variantCount","studioMode","hookStrategy","mainAction","scene","duration","ratio","voice","lang","detail","noText","noLogo","lip","consistent","uniqueHook","uniqueDialogue","dialogueTheme"];
+  const state={goal,currentMode};
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) state[id]=el.type==="checkbox" ? el.checked : el.value;
+  });
+  safeSetItem("promptAI_state", state);
+}
+function restoreState(){
+  if(!appState || typeof appState!=="object") return;
+  const ids=["product","batchProducts","variantCount","studioMode","hookStrategy","mainAction","scene","duration","ratio","voice","lang","detail","noText","noLogo","lip","consistent","uniqueHook","uniqueDialogue","dialogueTheme"];
+  ids.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el || appState[id]===undefined) return;
+    if(el.type==="checkbox") el.checked=!!appState[id];
+    else el.value=appState[id];
+  });
+  if(appState.goal) goal=appState.goal;
+  if(appState.currentMode) currentMode=appState.currentMode;
+  document.querySelectorAll("#goals .pill").forEach(x=>x.classList.toggle("active", x.dataset.v===goal));
+}
+async function copyText(text){
+  try {
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch(e){}
+  const ta=document.createElement("textarea");
+  ta.value=text; ta.style.position="fixed"; ta.style.opacity="0";
+  document.body.appendChild(ta); ta.focus(); ta.select();
+  let ok=false;
+  try { ok=document.execCommand("copy"); } catch(e){}
+  ta.remove();
+  return ok;
+}
+
+function switchMode(mode) {
+  currentMode = mode;
+  const tabSingle = document.getElementById('tabSingle');
+  const tabBatch = document.getElementById('tabBatch');
+  const tabTemplates = document.getElementById('tabTemplates');
+  const singleInputs = document.getElementById('singleModeInputs');
+  const batchInputs = document.getElementById('batchModeInputs');
+  const mainStudioContent = document.getElementById('mainStudioContent');
+  const templatesSection = document.getElementById('templatesSection');
+
+  tabSingle.classList.remove('active');
+  tabBatch.classList.remove('active');
+  tabTemplates.classList.remove('active');
+
+  if(mode === 'single') {
+    tabSingle.classList.add('active');
+    singleInputs.classList.remove('hidden');
+    batchInputs.classList.add('hidden');
+    mainStudioContent.classList.remove('hidden');
+    templatesSection.classList.add('hidden');
+  } else if(mode === 'batch') {
+    tabBatch.classList.add('active');
+    singleInputs.classList.add('hidden');
+    batchInputs.classList.remove('hidden');
+    mainStudioContent.classList.remove('hidden');
+    templatesSection.classList.add('hidden');
+  } else if(mode === 'templates') {
+    tabTemplates.classList.add('active');
+    mainStudioContent.classList.add('hidden');
+    templatesSection.classList.remove('hidden');
+    renderTemplates();
+  }
+}
+
+function handleStudioModeChange() {
+  const mode = document.getElementById("studioMode").value;
+  const hookContainer = document.getElementById("hookStrategyContainer");
+  const voiceRow = document.getElementById("voiceRow");
+  const lipCheckContainer = document.getElementById("lipCheckContainer");
+
+  if(mode === 'pose_only') {
+    hookContainer.classList.add('hidden');
+    voiceRow.classList.add('hidden');
+    lipCheckContainer.classList.add('hidden');
+  } else {
+    hookContainer.classList.remove('hidden');
+    voiceRow.classList.remove('hidden');
+    lipCheckContainer.classList.remove('hidden');
+  }
+}
+
+document.querySelectorAll("#goals .pill").forEach(x=>x.onclick=()=>{
+  document.querySelectorAll("#goals .pill").forEach(y=>y.classList.remove("active"));
+  x.classList.add("active");
+  goal = x.dataset.v;
+  persistState();
+});
+
+function handleFileSelect(event) {
+  const files = event.target.files;
+  if (!files || files.length === 0) return;
+
+  Array.from(files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      uploadedImages.push({
+        name: file.name,
+        size: (file.size / 1024 / 1024).toFixed(2) + ' MB',
+        url: evt.target.result
+      });
+      renderImageThumbnails();
+    };
+    reader.readAsDataURL(file);
+  });
+  event.target.value = '';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  const photoInput = document.getElementById('photoInput');
+  if(photoInput) {
+    photoInput.onchange = handleFileSelect;
+  }
+  restoreState();
+  handleStudioModeChange();
+  switchMode(currentMode);
+  let countSpan = document.getElementById("templateCountNum");
+  if(countSpan) countSpan.textContent = savedTemplates.length;
+  renderHistory();
+  generatedList = safeJSONParse(localStorage.getItem("promptAI_lastResults"), []);
+  renderBatchResults();
+  document.querySelectorAll("input, select, textarea").forEach(el=>{
+    el.addEventListener("input", persistState);
+    el.addEventListener("change", persistState);
+  });
+});
+
+function renderImageThumbnails() {
+  const grid = document.getElementById('imageGrid');
+  const info = document.getElementById('imageInfo');
+  const clearBtn = document.getElementById('clearPhotosBtn');
+
+  if (uploadedImages.length === 0) {
+    grid.innerHTML = '';
+    info.textContent = '';
+    clearBtn.style.display = 'none';
+    return;
+  }
+
+  clearBtn.style.display = 'block';
+  info.textContent = `Tổng số: ${uploadedImages.length} ảnh tham chiếu đã chọn`;
+
+  grid.innerHTML = uploadedImages.map((img, idx) => `
+    <div class="thumb">
+      <img src="${img.url}" alt="Thumb">
+      <button onclick="removeImage(${idx})">✕</button>
+    </div>
+  `).join('');
+}
+
+function removeImage(idx) {
+  uploadedImages.splice(idx, 1);
+  renderImageThumbnails();
+  toast("Đã xóa một ảnh");
+}
+
+function clearAllPhotos() {
+  uploadedImages = [];
+  renderImageThumbnails();
+  toast("Đã xóa tất cả ảnh tham chiếu");
+}
+
+const hookList = [
+"Đừng lướt vội, mẫu này có một điểm rất đáng chú ý!",
+"Nếu đang tìm một mẫu dễ mặc, xem ngay mẫu này.",
+"Nhìn đơn giản vậy thôi nhưng mẫu này có điểm rất cuốn.",
+"Bạn sẽ bất ngờ khi nhìn kỹ chi tiết của mẫu này.",
+"Mẫu này hợp với ai thích phong cách trẻ và gọn gàng.",
+"Đây là kiểu sản phẩm càng nhìn càng dễ phối.",
+"Nếu chỉ chọn một mẫu hôm nay, hãy xem mẫu này trước.",
+"Điểm mình thích nhất ở mẫu này là sự dễ dùng hằng ngày.",
+"Mẫu này đang rất hợp với phong cách trẻ hiện nay.",
+"Không cần phối cầu kỳ, mẫu này vẫn tạo điểm nhấn.",
+"Bạn thích mặc đẹp nhưng không muốn quá phức tạp?",
+"Một mẫu có thể dùng trong rất nhiều hoàn cảnh.",
+"Nhìn form là đã thấy cảm giác hiện đại rồi.",
+"Nếu bạn thích sự thoải mái, đừng bỏ qua mẫu này.",
+"Mẫu này có một ưu điểm rất dễ nhận ra khi mặc.",
+"Đây là lựa chọn đáng xem nếu bạn thích đồ basic hiện đại.",
+"Muốn tìm một mẫu vừa trẻ vừa dễ phối? Xem ngay.",
+"Một chi tiết nhỏ có thể làm tổng thể khác hẳn.",
+"Mẫu này phù hợp để lên đồ nhanh mỗi ngày.",
+"Nếu phong cách của bạn là gọn, trẻ và năng động, xem mẫu này.",
+"Đây là kiểu mẫu mặc đi đâu cũng dễ phối.",
+"Không cần quá nhiều phụ kiện, mẫu này vẫn nổi bật.",
+"Mẫu này có thể trở thành món đồ mặc thường xuyên.",
+"Bạn đang tìm một mẫu không lỗi thời? Thử xem mẫu này.",
+"Điểm cộng của mẫu này nằm ở cảm giác tổng thể.",
+"Chỉ vài giây thôi, bạn sẽ hiểu vì sao mẫu này đáng xem.",
+"Mẫu này dành cho người thích đẹp nhưng vẫn ưu tiên sự tiện dụng.",
+"Nếu bạn hay bí ý tưởng phối đồ, mẫu này rất dễ xử lý.",
+"Xem kỹ phần form và chi tiết của mẫu này nhé.",
+"Một lựa chọn đơn giản nhưng không hề nhàm chán."
+];
+
+const dialogueTemplates = [
+"Đây là {product}. Điểm mình thích là {benefit}. Mẫu này rất dễ dùng hằng ngày. Nếu thấy hợp gu, xem chi tiết ngay nhé!",
+"Với {product}, bạn có một lựa chọn {benefit}. Thiết kế nhìn trẻ và dễ phối. Thích mẫu này thì xem ngay thông tin bên dưới.",
+"Mình đang giới thiệu {product}. Cảm giác tổng thể là {benefit}. Đây là kiểu mẫu rất dễ đưa vào outfit hằng ngày.",
+"Nếu bạn ưu tiên {benefit}, {product} là một lựa chọn đáng xem. Thiết kế gọn gàng, dễ ứng dụng và hợp nhiều hoàn cảnh.",
+"{product} có điểm nổi bật ở {benefit}. Mẫu này phù hợp cho những ai thích phong cách hiện đại, đơn giản và dễ mặc.",
+"Điều đáng chú ý ở {product} là {benefit}. Bạn có thể phối theo nhiều kiểu mà vẫn giữ được tổng thể trẻ trung.",
+"Đây là {product}, một mẫu hướng tới {benefit}. Nếu đang tìm món đồ dùng thường xuyên, bạn có thể tham khảo mẫu này.",
+"Nhìn tổng thể, {product} cho cảm giác {benefit}. Phần thiết kế rất dễ kết hợp với các món đồ khác.",
+"Nếu bạn thích phong cách {benefit}, hãy xem {product}. Mẫu này ưu tiên sự tiện dụng nhưng vẫn giữ vẻ trẻ trung.",
+"{product} là lựa chọn phù hợp khi bạn muốn {benefit}. Xem kỹ hình ảnh và thông tin sản phẩm trước khi chọn nhé!"
+];
+
+const benefitList = [
+"dễ mặc và dễ phối đồ","cảm giác trẻ trung, năng động","thiết kế hiện đại, gọn gàng",
+"phù hợp mặc hằng ngày","dễ kết hợp nhiều phong cách","tổng thể tối giản nhưng nổi bật",
+"tính ứng dụng cao","phong cách trẻ và linh hoạt","dễ đưa vào nhiều outfit",
+"vẻ ngoài sạch sẽ và hiện đại"
+];
+
+function makeUniqueHook(index, product){
+  const base = hookList[index % hookList.length];
+  const angle = [
+    " tập trung vào thiết kế", " tập trung vào cảm giác mặc", " tập trung vào khả năng phối đồ",
+    " tập trung vào tính ứng dụng", " tập trung vào phong cách", " tập trung vào chi tiết",
+    " tập trung vào sự tiện lợi", " tập trung vào outfit hằng ngày", " tập trung vào điểm nổi bật",
+    " tập trung vào CTA"
+  ][index % 10];
+  return `${base}${angle} — ${product}.`;
+}
+
+function makeDialogue(index, product){
+  const tpl = dialogueTemplates[index % dialogueTemplates.length];
+  const benefit = benefitList[(index * 3) % benefitList.length];
+  return tpl.replaceAll("{product}", product).replaceAll("{benefit}", benefit);
+}
+
+function generateBatchPrompts(){
+  let products = [];
+  if(currentMode === 'single') {
+    let p = document.getElementById("product").value.trim() || "Sản phẩm trong ảnh tham chiếu";
+    products.push(p);
+  } else {
+    let raw = document.getElementById("batchProducts").value.trim();
+    if(!raw) {
+      toast("Vui lòng nhập danh sách sản phẩm!"); return;
+    }
+    products = raw.split("\n").map(x=>x.trim()).filter(x=>x.length > 0);
+  }
+
+  let varCount = currentMode === 'single' ? 1 : parseInt(document.getElementById("variantCount").value);
+  generatedList = [];
+  if(currentMode === "batch" && varCount > 100) varCount = 100;
+
+  let d = document.getElementById("duration").value;
+  let r = document.getElementById("ratio").value;
+  let studioMode = document.getElementById("studioMode").value;
+  let action = document.getElementById("mainAction").value.trim() || "tương tác tự nhiên với sản phẩm";
+  let scene = document.getElementById("scene").value.trim() || "bối cảnh studio hiện đại chuyên nghiệp";
+  let targetModel = "Veo 3.1 Fast";
+
+  let globalIndex = 0;
+  products.forEach((prod, pIdx) => {
+    for(let vIdx = 1; vIdx <= varCount; vIdx++) {
+      let assignedImage = null;
+      if(uploadedImages.length > 0) {
+        assignedImage = uploadedImages[globalIndex % uploadedImages.length];
+      }
+
+      let imageIngredient = assignedImage 
+        ? `[IMAGE INGREDIENT ATTACHED: ${assignedImage.name}]` 
+        : `[IMAGE INGREDIENT: Primary reference product]`;
+
+      let promptText = "";
+
+      if(studioMode === 'pose_only') {
+        promptText = `GOOGLE FLOW / VEO — PURE POSE & MOTION PROMPT V14 (MẪU #${globalIndex + 1})
+${imageIngredient}
+
+[01 — JOB & INFO]
+- Sản phẩm trọng tâm: ${prod}
+- Chế độ: 🧍‍♀️ Chỉ tạo dáng không lời (Silent Motion Focus)
+- Model mục tiêu: ${targetModel}
+- Thời lượng: ${d} | Tỷ lệ khung hình: ${r}
+
+[02 — CINEMATOGRAPHY & POSE CHOREOGRAPHY]
+- Camera Movement: Smooth cinematic panning, tracking the subject cleanly, maintaining sharp focus on the product and attire details.
+- Character Pose & Action (0-${d}): ${action} in ${scene}. Fluid, natural movements emphasizing angles, lighting highlights on the product, and expressive body language without any speech or dialogue.
+- Continuity: Absolute fidelity to the reference image. Strictly preserve product design, textures, colors, and key physical traits. Zero facial distortion.
+
+[03 — AUDIO & ATMOSPHERE]
+- Audio: Pure ambient soundscape or soft atmospheric background music only. NO dialogue, NO voiceover, NO lip-movement simulation.
+
+[04 — FLOW EXECUTION]
+1. Add Image / Ingredients: sử dụng ảnh tham chiếu (${assignedImage ? assignedImage.name : 'chuẩn'}).
+2. Dán prompt này và chọn chế độ Ingredients to Video.`;
+      } else {
+        let hook = document.getElementById("uniqueHook")?.checked ? makeUniqueHook(globalIndex, prod) : hookList[(pIdx + vIdx) % hookList.length];
+        let v = document.getElementById("voice").value;
+        let audio = "Giọng nói + âm thanh môi trường";
+        let dialogue = document.getElementById("uniqueDialogue")?.checked ? makeDialogue(globalIndex, prod) : makeDialogue(0, prod);
+
+        promptText = `GOOGLE FLOW / VEO — PRECISION VIDEO PROMPT V14 (MẪU #${globalIndex + 1})
+${imageIngredient}
+
+[01 — JOB & INFO]
+- Sản phẩm: ${prod}
+- Mục tiêu: ${goal}
+- Chủ đề lời thoại: ${document.getElementById("dialogueTheme")?.value.trim() || "tự nhiên, bán hàng mềm mại"}
+- Chế độ: ${studioMode}
+- Model mục tiêu: ${targetModel}
+- Thời lượng: ${d} | Tỷ lệ: ${r}
+
+[02 — CREATIVE DIRECTION & SHOT PLAN]
+- Hook (0-2s): ${hook}
+- Lời thoại (tiếng Việt): ${dialogue}
+- Action (2-6s): ${action} trong ${scene}. Giữ nguyên form dáng, màu sắc và nhận diện từ ảnh tham chiếu.
+- CTA (6-${d}): Ưng mẫu này thì xem ngay chi tiết bên dưới!
+
+[03 — AUDIO & CONTINUITY]
+- ${audio} (Giọng đọc: ${v})
+- Khóa nhận diện sản phẩm tuyệt đối, không đổi form, không tự thêm chi tiết lạ.
+- ${document.getElementById("noText").checked ? "Không subtitle, caption hay chữ đè." : ""}
+- ${document.getElementById("noLogo").checked ? "Không thêm logo mới." : ""}
+
+[04 — FLOW EXECUTION]
+1. Add Image / Ingredients: dùng đúng ảnh tham chiếu (${assignedImage ? assignedImage.name : 'chuẩn'}).
+2. Dán prompt này và chọn chế độ Ingredients to Video.`;
+      }
+
+      generatedList.push({
+        id: Date.now() + Math.random(),
+        productName: prod,
+        variantIndex: vIdx,
+        assignedImage: assignedImage,
+        text: promptText
+      });
+      globalIndex++;
+    }
+  });
+
+  renderBatchResults();
+  safeSetItem("promptAI_lastResults", generatedList);
+  saveHistoryBatch();
+  persistState();
+  document.getElementById("output").scrollIntoView({behavior:"smooth"});
+  toast(`Đã tạo ${generatedList.length} prompt — Hook + lời thoại được biến thể riêng!`);
+}
+
+function renderBatchResults(){
+  let box = document.getElementById("batchResultsList");
+  document.getElementById("promptCountNum").textContent = generatedList.length;
+  if(generatedList.length === 0) {
+    box.innerHTML = '<div class="empty">Chưa có prompt nào được tạo.</div>';
+    return;
+  }
+
+  box.innerHTML = generatedList.map((item, idx) => `
+    <div class="prompt-card-result">
+      <div class="prompt-card-header">
+        <span class="prompt-card-title">#${idx+1}. ${esc(item.productName)} (Mẫu ${item.variantIndex})</span>
+        <div class="prompt-card-actions">
+          <button class="secondary" onclick="copySinglePrompt(${idx})">📋 Copy</button>
+        </div>
+      </div>
+      ${item.assignedImage ? `<div style="margin-bottom:8px;"><img src="${item.assignedImage.url}" style="max-height:70px; border-radius:6px; border:1px solid #444; display:block;" alt="Assigned"></div>` : ''}
+      <div class="prompt-text">${esc(item.text)}</div>
+    </div>
+  `).join("");
+}
+
+function copySinglePrompt(idx){
+  let item = generatedList[idx];
+  if(!item) return;
+  copyText(item.text).then(ok=>toast(ok ? `Đã sao chép Prompt #${idx+1}` : "Không thể copy tự động — hãy nhấn giữ để sao chép."));
+}
+
+async function openExternalLink(url, el){
+  try {
+    const w = window.open(url, "_blank", "noopener,noreferrer");
+    if (w) return false;
+  } catch(e) {}
+  window.location.href = url;
+  return false;
+}
+
+async function copyBestToFlow(){
+  if(!generatedList.length) {
+    generateBatchPrompts();
+    if(!generatedList.length) return;
+  }
+  const copied = await copyText(generatedList[0].text);
+  toast(copied ? "Đã copy Prompt #1 chuẩn bị mở Flow" : "Prompt đã tạo — hãy copy thủ công nếu iPhone chặn clipboard");
+  setTimeout(()=>{ openExternalLink("https://labs.google/fx/tools/flow"); }, 400);
+}
+
+function copyAllPrompts(){
+  if(!generatedList.length) { toast("Không có prompt để copy!"); return; }
+  let fullText = generatedList.map((x,i)=>`====================\nPROMPT #${i+1}: ${x.productName}\n====================\n${x.text}`).join("\n\n");
+  copyText(fullText).then(ok=>toast(ok ? "Đã sao chép TOÀN BỘ danh sách prompt!" : "Không thể copy tự động — hãy nhấn giữ để sao chép."));
+}
+
+function downloadAllTxt(){
+  if(!generatedList.length) { toast("Không có prompt để tải!"); return; }
+  let fullText = generatedList.map((x,i)=>`====================\nPROMPT #${i+1}: ${x.productName}\n====================\n${x.text}`).join("\n\n");
+  const blob = new Blob([fullText], {type: "text/plain;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `Batch_Prompts_V14_${Date.now()}.txt`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+  toast("Đã tạo file .txt thành công");
+}
+
+/* CHỨC NĂNG LƯU VÀ QUẢN LÝ MẪU (TEMPLATES) DÙNG MODAL GIỐNG V7 */
+function openTemplateModal() {
+  const mainAction = document.getElementById("mainAction") ? document.getElementById("mainAction").value.trim() : "";
+  const studioMode = document.getElementById("studioMode") ? document.getElementById("studioMode").value : "pose_only";
+  let defaultName = mainAction ? mainAction.substring(0, 30) + '...' : `Mẫu ${studioMode}`;
+  
+  const nameInput = document.getElementById("templateNameInput");
+  if(nameInput) nameInput.value = defaultName;
+  
+  const modal = document.getElementById("templateModal");
+  if(modal) modal.classList.remove("hidden");
+  if(nameInput) {
+    nameInput.focus();
+    nameInput.select();
+  }
+}
+
+function closeTemplateModal() {
+  const modal = document.getElementById("templateModal");
+  if(modal) modal.classList.add("hidden");
+}
+
+function confirmSaveTemplate() {
+  const nameInput = document.getElementById("templateNameInput");
+  let templateName = nameInput ? nameInput.value.trim() : "";
+  if(!templateName) {
+    const studioMode = document.getElementById("studioMode") ? document.getElementById("studioMode").value : "pose_only";
+    templateName = `Mẫu ${studioMode}`;
+  }
+
+  const studioMode = document.getElementById("studioMode") ? document.getElementById("studioMode").value : "pose_only";
+  const hookStrategy = document.getElementById("hookStrategy") ? document.getElementById("hookStrategy").value : "auto";
+  const mainAction = document.getElementById("mainAction") ? document.getElementById("mainAction").value.trim() : "";
+  const scene = document.getElementById("scene") ? document.getElementById("scene").value.trim() : "";
+  const duration = document.getElementById("duration") ? document.getElementById("duration").value : "8 giây";
+  const ratio = document.getElementById("ratio") ? document.getElementById("ratio").value : "9:16 dọc";
+  const voice = document.getElementById("voice") ? document.getElementById("voice").value : "nữ miền Bắc";
+  const lang = document.getElementById("lang") ? document.getElementById("lang").value : "vi";
+  const detail = document.getElementById("detail") ? document.getElementById("detail").value : "chi tiết";
+  const uniqueHook = document.getElementById("uniqueHook") ? document.getElementById("uniqueHook").checked : true;
+  const uniqueDialogue = document.getElementById("uniqueDialogue") ? document.getElementById("uniqueDialogue").checked : true;
+  const dialogueTheme = document.getElementById("dialogueTheme") ? document.getElementById("dialogueTheme").value.trim() : "";
+
+  let templateObj = {
+    id: Date.now(),
+    name: templateName,
+    studioMode,
+    hookStrategy,
+    mainAction,
+    scene,
+    duration,
+    ratio,
+    voice,
+    lang,
+    detail,
+    uniqueHook,
+    uniqueDialogue,
+    dialogueTheme,
+    time: new Date().toLocaleString("vi-VN")
+  };
+
+  if (!Array.isArray(savedTemplates)) {
+    savedTemplates = [];
+  }
+
+  savedTemplates.unshift(templateObj);
+  let saveStatus = safeSetItem("promptAI_templates", savedTemplates);
+
+  closeTemplateModal();
+
+  let countSpan = document.getElementById("templateCountNum");
+  if(countSpan) countSpan.textContent = savedTemplates.length;
+
+  renderTemplates();
+
+  if (saveStatus) {
+    toast("⭐ Đã lưu cấu hình thành Mẫu thành công!");
+  } else {
+    toast("⚠️ Đã lưu vào bộ nhớ tạm");
+  }
+}
+
+function renderTemplates() {
+  let box = document.getElementById("templatesList");
+  let countSpan = document.getElementById("templateCountNum");
+  if(countSpan) countSpan.textContent = savedTemplates.length;
+
+  if(!savedTemplates.length) {
+    box.innerHTML = '<div class="empty">Chưa có mẫu cấu hình nào được lưu.</div>';
+    return;
+  }
+
+  box.innerHTML = savedTemplates.map((t, idx) => `
+    <div class="prompt-card-result" style="margin-bottom:10px;">
+      <div class="prompt-card-header">
+        <span class="prompt-card-title">📁 ${esc(t.name)}</span>
+        <div class="prompt-card-actions">
+          <button class="secondary" onclick="loadTemplate(${t.id})" style="background:#6c5ce7; color:#fff; border:0; font-weight:800;">⚡ Dùng mẫu</button>
+          <button class="secondary" onclick="deleteTemplate(${idx})" style="color:#ff6b6b;">✕</button>
+        </div>
+      </div>
+      <div class="mini" style="line-height:1.5; color:#555a6c;">
+        <b>Chế độ:</b> ${esc(t.studioMode)} | <b>Hành động:</b> ${esc(t.mainAction || 'Mặc định')} <br>
+        <b>Bối cảnh:</b> ${esc(t.scene || 'Mặc định')} | <b>Thời lượng:</b> ${esc(t.duration)} - ${esc(t.ratio)}
+        <div style="font-size:10px; color:#858999; margin-top:4px;">Lưu lúc: ${t.time}</div>
+      </div>
+    </div>
+  `).join("");
+}
+
+function loadTemplate(id) {
+  let t = savedTemplates.find(item => item.id === id);
+  if(!t) return;
+
+  document.getElementById("studioMode").value = t.studioMode;
+  handleStudioModeChange();
+  
+  if(document.getElementById("hookStrategy")) document.getElementById("hookStrategy").value = t.hookStrategy || "auto";
+  document.getElementById("mainAction").value = t.mainAction || "";
+  document.getElementById("scene").value = t.scene || "";
+  document.getElementById("duration").value = t.duration;
+  document.getElementById("ratio").value = t.ratio;
+  if(document.getElementById("voice")) document.getElementById("voice").value = t.voice;
+  if(document.getElementById("lang")) document.getElementById("lang").value = t.lang;
+  if(document.getElementById("detail")) document.getElementById("detail").value = t.detail;
+  if(document.getElementById("uniqueHook")) document.getElementById("uniqueHook").checked = t.uniqueHook !== undefined ? t.uniqueHook : true;
+  if(document.getElementById("uniqueDialogue")) document.getElementById("uniqueDialogue").checked = t.uniqueDialogue !== undefined ? t.uniqueDialogue : true;
+  if(document.getElementById("dialogueTheme")) document.getElementById("dialogueTheme").value = t.dialogueTheme || "";
+
+  switchMode('single');
+  toast(`Đã áp dụng mẫu: "${t.name}"`);
+}
+
+function deleteTemplate(idx) {
+  savedTemplates.splice(idx, 1);
+  safeSetItem("promptAI_templates", savedTemplates);
+  renderTemplates();
+  toast("Đã xóa mẫu");
+}
+
+function clearAllTemplates() {
+  if(confirm("Bạn có chắc chắn muốn xóa toàn bộ các mẫu đã lưu?")) {
+    savedTemplates = [];
+    localStorage.removeItem("promptAI_templates");
+    renderTemplates();
+    toast("Đã xóa tất cả mẫu");
+  }
+}
+
+function saveHistoryBatch(){
+  if(!generatedList.length) return;
+  let arr = safeGetArray("promptAI_history");
+  arr.unshift({
+    id: Date.now(),
+    title: `Bộ ${generatedList.length} Prompt (${generatedList[0].productName}...)`,
+    text: generatedList.map((x,i)=>`[PROMPT ${i+1}: ${x.productName}]\n${x.text}`).join("\n\n-----------------------\n\n"),
+    time: new Date().toLocaleString("vi-VN")
+  });
+  safeSetItem("promptAI_history", arr.slice(0,15));
+  renderHistory();
+}
+
+function renderHistory(){
+ let arr = safeGetArray("promptAI_history");
+ let box = document.getElementById("historyList");
+ if(!arr.length){box.innerHTML='<div class="empty">Chưa có lịch sử lưu.</div>';return}
+ box.innerHTML = arr.map((x,i)=>`
+   <div class="history-item">
+     <div><b>${esc(x.title)}</b><small>${x.time}</small></div>
+     <div class="history-btns"><button class="secondary" onclick="deleteHistoryItem(${i})" style="color:#ff6b6b">✕</button></div>
+   </div>`).join("");
+}
+
+function deleteHistoryItem(i){
+ let a = JSON.parse(localStorage.getItem("promptAI_history")||"[]");
+ a.splice(i,1);
+ safeSetItem("promptAI_history", a);
+ renderHistory(); toast("Đã xóa mục lịch sử");
+}
+
+function clearHistory(){localStorage.removeItem("promptAI_history");renderHistory();toast("Đã xóa toàn bộ lịch sử")}
+function clearResult(){generatedList = []; renderBatchResults(); toast("Đã xóa kết quả")}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function toast(t){let x=document.getElementById("toast");x.textContent=t;x.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>x.style.display="none",1800)}
+</script>
+</body>
+</html>
